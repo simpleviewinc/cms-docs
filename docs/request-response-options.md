@@ -1,0 +1,7 @@
+## Request/Response Options
+
+* `castDocs` - `boolean` - Should the docs be cast per the data model (default: `true`)
+* `limit` - `integer` - The maximum number of docs to return. (default: `0`, e.g. no limit. However, you should *always* specify a limit to avoid exceeding the API response size limit.)
+* `fields` - `object` - A map of the fields which should be included for each doc. Generally follows mongodb syntax. The keys represent the field name, the value should be a `boolean` using `true` to include the field or `false` to exclude. You must use all `true` or all `false` values, but not a mixture.
+* `count` - `boolean` - specifies if the total number of matched records (ignoring `options.limit`) should be included in the response. Useful for knowing the total results when displaying a pager, for example. (**warning**: this can be an expensive operations for large tables, such as `events_by_date`). (default: `false`)
+* `sort` - `object` - A key/value map of fields by which the result docs should be sorted. The keys represent field names and the values should be 1 or -1 for ascending or descending order. See [mongodb sort documentation](https://docs.mongodb.com/manual/reference/method/cursor.sort/) for more details. Not all mongodb features may be supported.
