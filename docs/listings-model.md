@@ -554,7 +554,7 @@ Since this is a singleton table, which contains a large amount of data, you'll a
 The best way to understand this data is to look at some responses, such as this one:
 
 ```
-https://[client_identifier].simpleviewinc.com/includes/rest_v2/plugins_listings_listingmeta/find/?json={%22options%22:{%22fields%22:{%22listingudfs_object%22:true}}}&token=6db0fd820e20e7295515f5657dd75e6f
+https://[client_identifier].simpleviewinc.com/includes/rest_v2/plugins_listings_listingmeta/find/?json={"options":{"fields":{"listingudfs_object":true}}}&token=6db0fd820e20e7295515f5657dd75e6f
 ```
 
 Try replacing `listingudfs_object` with `accountudfs_object` or `listingcats`, etc. You'll of course need to grab a fresh access token to replace the one in the URL above.
