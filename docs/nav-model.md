@@ -61,7 +61,7 @@ Nav is where page data is stored.
 
 ### Example Nav Endpoint URLs
 ```
-https://[client_identifier].simpleviewinc.com/includes/rest_v2/plugins_nav_navitems/find/?json=%7B%22options%22%3A%7B%22limit%22%3A%2010,%22fields%22%3A%7B%7D%7D%7D&token=f19942375ec3b67599c82197385c8e19
+https://[client_identifier].simpleviewinc.com/includes/rest_v2/plugins_nav_navitems/find/?json={"options":{"limit":10,"fields":{}}}&token=f19942375ec3b67599c82197385c8e19
 ```
 
 ### Example Nav Item Data

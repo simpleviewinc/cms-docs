@@ -35,7 +35,7 @@ Blog Posts are where blog page content is stored. Multiple blogs can be present 
 ### Main Blog Post Endpoint URLs
 
 ```
-https://[client_identifier].simpleviewinc.com/includes/rest_v2/plugins_blog_[blog_identifier]_posts/find/?json=%7B%22options%22%3A%7B%22limit%22%3A%2010,%22fields%22%3A%7B%7D%7D%7D&token=c9946f31c4ea64b601cb3268feff0c8f
+https://[client_identifier].simpleviewinc.com/includes/rest_v2/plugins_blog_[blog_identifier]_posts/find/?json={"options":{"limit":10,"fields":{}}}&token=c9946f31c4ea64b601cb3268feff0c8f
 https://[client_identifier].simpleviewinc.com/includes/rest_v2/plugins_blog_[blog_identifier]_posts/count/?&token=c9946f31c4ea64b601cb3268feff0c8f
 ```
 
@@ -43,7 +43,7 @@ https://[client_identifier].simpleviewinc.com/includes/rest_v2/plugins_blog_[blo
 ### Example Blog Post Endpoint URLs
 
 ```
-https://rc.simpleviewinc.com/includes/rest_v2/plugins_blog_leisure_blog_posts/find/?json=%7B%22options%22%3A%7B%22limit%22%3A%2010,%22fields%22%3A%7B%7D%7D%7D&token=c9946f31c4ea64b601cb3268feff0c8f
+https://rc.simpleviewinc.com/includes/rest_v2/plugins_blog_leisure_blog_posts/find/?json={"options":{"limit": 10,"fields":{}}}&token=c9946f31c4ea64b601cb3268feff0c8f
 https://rc.simpleviewinc.com/includes/rest_v2/plugins_blog_leisure_blog_posts/count/?&token=c9946f31c4ea64b601cb3268feff0c8f
 ```
 
