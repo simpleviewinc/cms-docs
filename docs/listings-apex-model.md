@@ -2,9 +2,6 @@
   - [Listings Fields](#listings-fields)
   - [Example Listing Queries](#example-listing-queries)
   - [Example Listings Docs](#example-listings-docs)
-  - [Listing Meta Fields](#listing-meta-fields)
-  - [Example Listing Meta data](#example-listing-meta-data)
-
 
 ***
 
@@ -24,17 +21,15 @@ your own website's URL.
 - https://[client_identifier].simpleviewinc.com/includes/rest_v2/plugins_listings_listings/find/
 - https://[client_identifier].simpleviewinc.com/includes/rest_v2/plugins_listings_listings/count/
 - https://[client_identifier].simpleviewinc.com/includes/rest_v2/plugins_listings_listings/aggregate/
-- https://[client_identifier].simpleviewinc.com/includes/rest_v2/plugins_listings_listingmeta/find/
-- https://[client_identifier].simpleviewinc.com/includes/rest_v2/plugins_listings_listingmeta/aggregate/
 ```
 
-### Listings Fields
+### Listings API
 
 **Model: `plugins_listings_listings`**
 
-This is the main listings database table.
+This is the main listings database table. For the most part, data is provided exactly as it comes from Apex, but a few CMS-specific fields are added, such as `last_sync`, `detail_url`, etc.
 
-Note: some (less useful/common) fields are excluded in order to keep this list as terse as possible. In some cases, there may be more than one way to access the same data, so we've ommitted the less-useful ways. Please don't hesitate to reach out with questions.
+#### Listings Fields
 
 * `listing_id` - `String` - unique identifier for this listing
 * `_id` - `ObjectId` - internal identifier not intended for general use. Use `listing_id` instead, as `_id` can change.
@@ -61,6 +56,7 @@ Note: some (less useful/common) fields are excluded in order to keep this list a
   * `last_updated_at` - `Date`
 * `rank_id` - `String`
 * `property_id` - `String` - ID for the property this listing is associated with
+* `property` - `Object` - The listing's property (see Properties model below for specification)
 * `channel_ids` - `Array[String]` - channels this listing is assigned to
 * `last_sync` - `Date` - date the listing was last synced from Apex
 * `active` - `Boolean` - indicates whether the listing should be shown on any sites. Typically, this will be `false` if a listing has been assigned to no sites, based on channel to site mappings.
@@ -76,11 +72,17 @@ Note: some (less useful/common) fields are excluded in order to keep this list a
 * `absolute_primary_url` - `String`
 
 
-### Properties Fields
+### Properties API
 
 **Model: `plugins_listings_properties`**
 
 Every listing is associated with a single property. A property may be associated with one or many listings, and holds data shared between all its associated listings.
+
+While the properties model has its own API and endpoints, it's possible to use the "afterFind_property" hook when querying the listings API to include each listing's most relevant property data. See the provided examples.
+
+Like listings, most of this data is provided exactly as it comes from Apex.
+
+#### Properties Fields
 
 * `property_id` - `String` - unique identifier for this property
 * `_id` - `ObjectID` - internal identifier not intended for general use. Use `property_id` instead, as `_id` can change.
@@ -187,11 +189,28 @@ Every listing is associated with a single property. A property may be associated
 
 ### Example Listing Queries
 
-#### Find a single listing by listing_id, return the `listing_id` and `title` fields (JavaScript/jQuery)
+#### Example 1: Query by `listing_id`
+
+Find a single listing by its `listing_id`, and return ONLY the `listing_id` and `title` fields. Note 
+that the `castDocs: false` and limited `fields` keeps the returned data very concise. This is a bit
+of an extreme/contrived example, but is meant to showcase these features.
 
 ```javascript
+const query = {
+	filter: {
+ 		listing_id: 41849
+   	},
+    	options: {
+     		castDocs: false,
+		fields: {
+  			listing_id: 1,
+     			title: 1
+		}
+	}
+};
+
 $.get("/includes/rest_v2/plugins_listings_listings/find/", {
-  json : JSON.stringify({ filter : { listing_id : 41849 }, options : { castDocs: false, fields : { listing_id : 1, title : 1 }, limit : 1 } }),
+  json : JSON.stringify(query),
   token : "d2f5ba5eaab52cb4ce80280b5afffdd8"
 }, function(data) {
   console.log(data);
@@ -211,13 +230,29 @@ $.get("/includes/rest_v2/plugins_listings_listings/find/", {
 ```
 
 
-#### Query by site and a specific subcategory
+#### Example 2: Query by site and a specific subcategory
 
-This example shows how `filter_tags` can be used to query by both site and subcategory. This is an efficient method to query because `filter_tags` is an indexed field. Most of your queries should use at least one filter tag, as the **first** filter parameter (the order of filter parameters counts).
+This example shows how `filter_tags` can be used to query by both site and subcategory. This query is very efficient because `filter_tags` is an indexed field in the database. Most of your queries should use at least one filter tag as the **first** filter parameter (the order of filter parameters counts).
+
+This query also passes a `limit` to specify the maximum number of items to be returned.
 
 ```javascript
+const query = {
+	filter_tags: {
+		$in: ['site_primary_subcatid_161']
+	},
+ 	options: {
+  		castDocs: false,
+    		fields: {
+      			listing_id: 1,
+			title: 1
+   		},
+     		limit: 3
+	}
+};
+
 $.get("/includes/rest_v2/plugins_listings_listings/find/", {
-  json : JSON.stringify({ filter_tags : { $in : ['site_primary_subcatid_161'] }, options : { castDocs: false, fields : { listing_id : 1, title : 1 }, limit : 3 } }),
+  json : JSON.stringify(query),
   token : "d2f5ba5eaab52cb4ce80280b5afffdd8"
 }, function(data) {
   console.log(data);
@@ -245,25 +280,31 @@ $.get("/includes/rest_v2/plugins_listings_listings/find/", {
 ```
 
 
-#### Find a listing and include the property data
+#### Find a randomly selected listing and include the property data
 
 ```javascript
-var filter = {
-  filter_tags: { $in: ['site_primary']},
-  'listingudfs_object.1354.listid' : 770
+const query = {
+	filter: {
+		filter_tags: {
+			$in: ['site_primary']
+		},
+	},
+	options: {
+		castDocs: false,
+		fields : {
+			listing_id: 1,
+			title: 1,
+			detail_url: 1
+		},
+		random : 1,
+		hooks: [
+			"afterFind_property"
+		]
+	}
 };
 
-var options = {
-  castDocs: false,
-  fields : {
-    recid : 1,
-    title : 1
-  },
-  limit : 3
-}
-
 $.get("/includes/rest_v2/plugins_listings_listings/find/", {
-  json : JSON.stringify({ filter: filter, options : options }),
+  json : JSON.stringify(query),
   token : "d2f5ba5eaab52cb4ce80280b5afffdd8"
 }, function(data) {
   console.log(data);
@@ -272,22 +313,7 @@ $.get("/includes/rest_v2/plugins_listings_listings/find/", {
 
 **Response:**
 ```json
-{
-  "docs": [
-    {
-      "recid": 956,
-      "title": "Pearl Continental Hotel East"
-    },
-    {
-      "recid": 41896,
-      "title": "101 Riverviews"
-    },
-    {
-      "recid": 42629,
-      "title": "101 Riverviews"
-    }
-  ]
-}
+
 ```
 
 
