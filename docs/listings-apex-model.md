@@ -7,9 +7,16 @@ This is still in progress and some data is incomplete or incorrect.
 
 ***
 
-[Listings API](#listings-api)
-[Properties API](#properties-api)
-
+- [Listings API](#listings-api)
+	- [Listings Endpoints](#listings-endpoints)
+ 	- [Example Listings Queries](#example-listings-queries)
+	- [Listings Fields](#listings-fields)
+   	- [Example Listings Docs](#example-listings-docs)
+- [Properties API](#properties-api)
+	- [Properties Endpoints](#properties-endpoints)
+	- [Example Properties Queries](#example-properties-queries)
+	- [Properties Fields](#properties-fields)
+   	- [Example Properties Docs](#example-properties-docs)
 
 ## Listings API
 
@@ -72,7 +79,7 @@ your own website's URL.
 * `absolute_primary_url` - `String`
 
 
-### Example Listing Queries
+### Example Listings Queries
 
 #### Example 1: Query by `listing_id`
 
