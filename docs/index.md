@@ -6,7 +6,7 @@ The REST API (v2) can be used to query your website's backend database. This doc
 - [Generating an Access Token](generate-access-token.md)
 - [Request Format](request-format.md)
 - [Request/Response Options](request-response-options.md)
-- [Listings Model - Legacy Version](listings-model.md)
+- [Listings Model - Legacy Version](listings-legacy-model.md)
 	- [Listings Fields](listings-legacy-model.md#listings-fields)
 	- [Example Listing Queries](listings-legacy-model.md#example-listing-queries)
 	- [Example Listings Docs](listings-legacy-model.md#example-listings-docs)
