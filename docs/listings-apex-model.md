@@ -130,8 +130,10 @@ This query also passes a `limit` to specify the maximum number of items to be re
 
 ```javascript
 const query = {
-	filter_tags: {
-		$in: ['site_primary_subcatid_161']
+	filter : {
+	        filter_tags: {
+			    $in: ['site_primary_subcatid_1']
+	        }
 	},
  	options: {
   		castDocs: false,
@@ -156,16 +158,16 @@ $.get("/includes/rest_v2/plugins_listings_listings/find/", {
 {
   "docs": [
     {
-      "listing_id": 5,
-      "title": "Maritime Tours AS"
+        "listing_id": "9",
+        "title": "Hacienda Del Sol Guest Ranch Resort"
     },
     {
-      "listing_id": 8,
-      "title": "Voss Active"
+        "listing_id": "21",
+        "title": "Affinia Hotel South"
     },
     {
-      "listing_id": 12,
-      "title": "The Whaling Museum"
+        "listing_id": "69",
+        "title": "Antiochian Village Camp"
     }
   ]
 }
